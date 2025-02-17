@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hansel Auto Group Instagram Feed</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .instagram-feed { display: flex; flex-wrap: wrap; justify-content: center; }
+        .instagram-feed img { width: 200px; margin: 5px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h2>Hansel Auto Group Instagram Feed</h2>
+    <div class="instagram-feed" id="instagram-feed"></div>
+
+    <script>
+        async function fetchInstagramPosts() {
+            try {
+                const response = await fetch('https://www.instagram.com/hanselautogroup/');
+                const text = await response.text();
+                
+                // Extract image URLs using regex
+                const imageUrls = [...text.matchAll(/"display_url":"(https:\\/\\/[^"]+)"/g)].map(m => m[1]);
+
+                let feedContainer = document.getElementById("instagram-feed");
+                imageUrls.slice(0, 10).forEach(url => {
+                    let imgElement = `<a href="https://www.instagram.com/hanselautogroup/" target="_blank"><img src="${url.replace(/\\u0026/g, '&')}" alt="Instagram Post"></a>`;
+                    feedContainer.innerHTML += imgElement;
+                });
+
+            } catch (error) {
+                console.error("Error fetching Instagram posts:", error);
+                document.getElementById("instagram-feed").innerHTML = "<p>Unable to load Instagram feed.</p>";
+            }
+        }
+
+        fetchInstagramPosts();
+    </script>
+</body>
+</html>
