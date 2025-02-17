@@ -17,11 +17,12 @@
     <script>
         async function fetchInstagramPosts() {
             try {
-                const response = await fetch('https://www.instagram.com/hanselautogroup/');
-                const text = await response.text();
-                
+                // Using a CORS proxy to bypass Instagram's restrictions
+                const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.instagram.com/hanselautogroup/'));
+                const data = await response.json();
+
                 // Extract image URLs using regex
-                const imageUrls = [...text.matchAll(/"display_url":"(https:\\/\\/[^"]+)"/g)].map(m => m[1]);
+                const imageUrls = [...data.contents.matchAll(/"display_url":"(https:\\/\\/[^"]+)"/g)].map(m => m[1]);
 
                 let feedContainer = document.getElementById("instagram-feed");
                 imageUrls.slice(0, 10).forEach(url => {
